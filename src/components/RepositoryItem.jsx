@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import theme from './theme';
+import theme from '../theme';
 import Text from './Text';
+import Tag from './Tag';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,13 +16,25 @@ const styles = StyleSheet.create({
   headerCol: {
     display: 'flex',
     flexDirection: 'column',
-    flex: 1,
+    gap: 5,
     flexShrink: 1,
-    marginLeft: 10,
+    marginLeft: 20,
   },
   avatarIcon: {
-    height: 50,
-    width: 50,
+    height: 40,
+    width: 40,
+  },
+  footer: {
+    marginTop: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingInline: 20,
+  },
+  itemFooter: {
+    display: 'flex',
+    gap: 7,
+    alignItems: 'center',
   },
 });
 
@@ -37,14 +50,25 @@ const RepositoryItem = ({ fullName, description, language, stargazersCount, fork
       <View style={styles.headerCol}>
         <Text fontWeight="bold">{fullName}</Text>
         {description && <Text>{description}</Text>}
-        <Text>{language}</Text>
+        <Tag label={language} />
       </View>
     </View>
-    <Text>Stars: {stargazersCount}</Text>
-    <Text>Forks: {forksCount}</Text>
-    <Text>Reviews: {reviewCount}</Text>
-    <Text>Rating: {ratingAverage}</Text>
+    <View style={styles.footer}>
+      <ItemFooter label="Stars" value={stargazersCount} />
+      <ItemFooter label="Forks" value={forksCount} />
+      <ItemFooter label="Reviews" value={reviewCount} />
+      <ItemFooter label="Rating" value={ratingAverage} />
+    </View>
   </View>
 );
+
+const ItemFooter = ({ label, value }) => {
+  return (
+    <View style={styles.itemFooter}>
+      <Text fontWeight="bold">{value}</Text>
+      <Text>{label}</Text>
+    </View>
+  );
+};
 
 export default RepositoryItem;

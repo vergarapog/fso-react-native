@@ -1,7 +1,7 @@
 import { View, StyleSheet, Pressable } from 'react-native';
 import Constants from 'expo-constants';
 import Text from './Text';
-import theme from './theme';
+import theme from '../theme';
 import AppBarItem from './AppBarItem';
 
 const styles = StyleSheet.create({
