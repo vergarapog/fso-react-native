@@ -1,10 +1,13 @@
-import { Pressable } from "react-native";
-import Text from "./Text";
+import { Pressable } from 'react-native';
+import Text from './Text';
+import { Link } from 'react-router-native';
 
-const AppBarItem = ({ title }) => {
+const AppBarItem = ({ title, route }) => {
   return (
     <Pressable>
-      <Text color="white">{title}</Text>
+      <Link to={route}>
+        <Text color="white">{title}</Text>
+      </Link>
     </Pressable>
   );
 };
