@@ -3,6 +3,7 @@ import { View, StyleSheet, Image } from 'react-native';
 import theme from '../theme';
 import Text from './Text';
 import Tag from './Tag';
+import { suffixK } from '../utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -65,7 +66,7 @@ const RepositoryItem = ({ fullName, description, language, stargazersCount, fork
 const ItemFooter = ({ label, value }) => {
   return (
     <View style={styles.itemFooter}>
-      <Text fontWeight="bold">{value}</Text>
+      <Text fontWeight="bold">{suffixK(value)}</Text>
       <Text>{label}</Text>
     </View>
   );
