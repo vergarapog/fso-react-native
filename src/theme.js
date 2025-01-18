@@ -25,6 +25,13 @@ const theme = {
     normal: '400',
     bold: '700',
   },
+  //Reusable styles
+  styles: {
+    container: {
+      flexGrow: 1,
+      flexShrink: 1,
+    },
+  },
 };
 
 export default theme;
