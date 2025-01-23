@@ -3,7 +3,7 @@ import { View, StyleSheet, Image } from 'react-native';
 import theme from '../theme';
 import Text from './Text';
 import Tag from './Tag';
-import { suffixK } from '../utils';
+import { suffixK } from '../helpers';
 
 const styles = StyleSheet.create({
   container: {
