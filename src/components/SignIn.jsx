@@ -5,6 +5,7 @@ import theme from '../theme';
 import * as yup from 'yup';
 import useSignIn from '../hooks/useSignIn';
 import { useNavigate } from 'react-router-native';
+import { useState } from 'react';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,6 +31,16 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: theme.colors.white,
   },
+  errorContainer: {
+    backgroundColor: theme.colors.redError,
+    padding: 10,
+    borderRadius: 4,
+    marginBottom: 10,
+  },
+  errorText: {
+    color: theme.colors.white,
+    textAlign: 'center',
+  }
 });
 
 const initialValues = {
@@ -44,7 +55,7 @@ const validationSchema = yup.object().shape({
 
 const SignIn = () => {
   const [signIn] = useSignIn();
-
+  const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
 
   const onSubmit = async (values) => {
@@ -52,6 +63,7 @@ const SignIn = () => {
       const data = await signIn(values);
       navigate('/');
     } catch (error) {
+      setLoginError('Invalid username or password');
       console.log(error);
     }
   };
@@ -64,6 +76,11 @@ const SignIn = () => {
 
   return (
     <View style={styles.container}>
+      {loginError && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{loginError}</Text>
+        </View>
+      )}
       <TextInput
         style={[styles.input, formik.errors.username && { borderColor: 'red' }]}
         value={formik.values.username}
