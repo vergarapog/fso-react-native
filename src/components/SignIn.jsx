@@ -76,7 +76,7 @@ const SignIn = () => {
 
   return (
     <View style={styles.container}>
-      {loginError && (
+      {!!loginError && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{loginError}</Text>
         </View>
