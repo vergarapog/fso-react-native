@@ -1,8 +1,9 @@
 import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
-import Text from './Text';
 import theme from '../theme';
 import AppBarItem from './AppBarItem';
+import useLogout from '../hooks/useLogout';
+import useCurrentUser from '../hooks/useCurrentUser';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,11 +21,18 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const [logout] = useLogout();
+  const { currentUser } = useCurrentUser();
+
   return (
     <View>
       <ScrollView horizontal style={styles.container}>
         <AppBarItem title="Repositories" route="/" style={styles.item} />
-        <AppBarItem title="Sign In" route="/sign-in" style={styles.item} />
+        {currentUser?.me ? (
+          <AppBarItem title="Sign Out" onPress={logout} style={styles.item} />
+        ) : (
+          <AppBarItem title="Sign In" route="/sign-in" style={styles.item} />
+        )}
       </ScrollView>
     </View>
   );

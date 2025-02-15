@@ -27,3 +27,14 @@ export const GET_REPOSITORIES = gql`
   ${REVIEW_FIELDS}
   ${PAGE_INFO_FIELDS}
 `;
+
+export const GET_ME = gql`
+  query Me {
+    me {
+      id
+      username
+      createdAt
+      reviewCount
+    }
+  }
+`;

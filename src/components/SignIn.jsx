@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: theme.colors.white,
     textAlign: 'center',
-  }
+  },
 });
 
 const initialValues = {
