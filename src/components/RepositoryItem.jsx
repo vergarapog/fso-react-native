@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 });
 
 const RepositoryItem = ({ fullName, description, language, stargazersCount, forksCount, reviewCount, ratingAverage, ownerAvatarUrl }) => (
-  <View style={styles.container}>
+  <View testID="repositoryItem" style={styles.container}>
     <View style={styles.header}>
       <Image
         style={styles.avatarIcon}
