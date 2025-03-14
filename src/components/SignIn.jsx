@@ -53,7 +53,7 @@ const validationSchema = yup.object().shape({
   password: yup.string().min(3, 'Password must be more than 3 characters').required('Password is required'),
 });
 
-const SignInForm = ({ onSubmit, loginError }) => {
+export const SignInForm = ({ onSubmit, loginError }) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
