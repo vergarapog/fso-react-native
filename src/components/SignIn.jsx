@@ -53,21 +53,7 @@ const validationSchema = yup.object().shape({
   password: yup.string().min(3, 'Password must be more than 3 characters').required('Password is required'),
 });
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-  const [loginError, setLoginError] = useState('');
-  const navigate = useNavigate();
-
-  const onSubmit = async (values) => {
-    try {
-      const data = await signIn(values);
-      navigate('/');
-    } catch (error) {
-      setLoginError('Invalid username or password');
-      console.log(error);
-    }
-  };
-
+const SignInForm = ({ onSubmit, loginError }) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -101,6 +87,24 @@ const SignIn = () => {
       </Pressable>
     </View>
   );
+};
+
+const SignIn = () => {
+  const [signIn] = useSignIn();
+  const [loginError, setLoginError] = useState('');
+  const navigate = useNavigate();
+
+  const onSubmit = async (values) => {
+    try {
+      const data = await signIn(values);
+      navigate('/');
+    } catch (error) {
+      setLoginError('Invalid username or password');
+      console.log(error);
+    }
+  };
+
+  return <SignInForm onSubmit={onSubmit} loginError={loginError} />;
 };
 
 export default SignIn;
