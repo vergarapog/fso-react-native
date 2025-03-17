@@ -28,6 +28,15 @@ export const GET_REPOSITORIES = gql`
   ${PAGE_INFO_FIELDS}
 `;
 
+export const GET_SINGLE_REPOSITORY = gql`
+  query Repository($repositoryId: ID!) {
+    repository(id: $repositoryId) {
+      ...RepositoryFields
+    }
+  }
+  ${REPOSITORY_FIELDS}
+`;
+
 export const GET_ME = gql`
   query Me {
     me {
