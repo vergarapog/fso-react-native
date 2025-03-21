@@ -1,10 +1,37 @@
 import React from 'react';
-import { View, ActivityIndicator, FlatList } from 'react-native';
+import { View, ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 import { useParams } from 'react-router-native';
 import RepositoryItem from './RepositoryItem';
 import theme from '../theme';
 import useSingleRepository from '../hooks/useSingleRepository';
 import Text from './Text';
+import { format } from 'date-fns';
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: theme.colors.white,
+    padding: 20,
+    marginVertical: 20,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  scoreContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderColor: theme.colors.primary,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  contentContainer: {
+    flex: 1,
+    paddingLeft: 10,
+  },
+  titleContainer: {
+    marginBottom: 5,
+  },
+});
 
 const RepositoryInfo = ({ repository }) => {
   return (
@@ -15,10 +42,19 @@ const RepositoryInfo = ({ repository }) => {
 };
 
 const ReviewItem = ({ item }) => {
-  console.log(item);
+  const { rating, user, text, createdAt } = item;
   return (
-    <View>
-      <Text>ReviewItem</Text>
+    <View style={styles.container}>
+      <View style={styles.scoreContainer}>
+        <Text>{rating}</Text>
+      </View>
+      <View style={styles.contentContainer}>
+        <View style={styles.titleContainer}>
+          <Text fontWeight="bold">{user.username}</Text>
+          <Text>{format(createdAt, 'dd.MM.yyyy')}</Text>
+        </View>
+        <Text>{text}</Text>
+      </View>
     </View>
   );
 };
@@ -28,14 +64,12 @@ const RepositoryView = () => {
 
   const { repository, loading } = useSingleRepository(id);
 
-  console.log(repository?.reviews?.edges);
-
   if (loading) {
     return <ActivityIndicator style={theme.styles.container} size="large" color={theme.colors.primary} />;
   }
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <FlatList
         data={repository?.reviews?.edges}
         renderItem={({ item }) => <ReviewItem item={item.node} />}
