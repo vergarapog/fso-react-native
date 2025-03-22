@@ -10,7 +10,7 @@ import { format } from 'date-fns';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.white,
-    padding: 20,
+    padding: 15,
     marginVertical: 20,
     display: 'flex',
     flexDirection: 'row',
@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   titleContainer: {
-    marginBottom: 5,
+    marginTop: 4,
+    marginBottom: 4,
   },
 });
 
