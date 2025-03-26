@@ -4,9 +4,11 @@ import { Link } from 'react-router-native';
 
 const AppBarItem = ({ title, route, style, onPress }) => {
   return (
-    <Pressable style={style} >
+    <Pressable style={style}>
       <Link to={route} onPress={onPress}>
-        <Text color="white">{title}</Text>
+        <Text color="white" fontWeight="bold">
+          {title}
+        </Text>
       </Link>
     </Pressable>
   );
