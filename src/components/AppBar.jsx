@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
-    // gap: 7,
     paddingTop: Constants.statusBarHeight + 20,
     backgroundColor: theme.colors.appBarBg,
     paddingBottom: 20,
@@ -28,6 +27,7 @@ const AppBar = () => {
     <View>
       <ScrollView horizontal style={styles.container}>
         <AppBarItem title="Repositories" route="/" style={styles.item} />
+        {currentUser?.me && <AppBarItem title="Create a review" route="/review" style={styles.item} />}
         {currentUser?.me ? (
           <AppBarItem title="Sign Out" onPress={logout} style={styles.item} />
         ) : (
