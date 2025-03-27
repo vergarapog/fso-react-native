@@ -33,6 +33,7 @@ const AppBar = () => {
         ) : (
           <AppBarItem title="Sign In" route="/sign-in" style={styles.item} />
         )}
+        {!currentUser?.me && <AppBarItem title="Sign up" route="/sign-up" style={styles.item} />}
       </ScrollView>
     </View>
   );
