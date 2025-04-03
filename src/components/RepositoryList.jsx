@@ -3,6 +3,7 @@ import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
 import theme from '../theme';
 import { useNavigate } from 'react-router-native';
+import { useState } from 'react';
 
 const styles = StyleSheet.create({
   separator: {
@@ -13,6 +14,10 @@ const styles = StyleSheet.create({
 export const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({ repositories, loading }) => {
+  // const [selectedLanguage, setSelectedLanguage] = useState();
+
+  const navigate = useNavigate();
+
   const repositoryNodes = repositories
     ? repositories?.edges?.map((edge) => {
         return edge.node;
@@ -23,28 +28,28 @@ export const RepositoryListContainer = ({ repositories, loading }) => {
     return <ActivityIndicator style={theme.styles.container} size="large" color={theme.colors.primary} />;
   }
 
-  const navigate = useNavigate();
-
   return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => (
-        <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
-          <RepositoryItem
-            fullName={item.fullName}
-            description={item.description}
-            language={item.language}
-            stargazersCount={item.stargazersCount}
-            forksCount={item.forksCount}
-            reviewCount={item.reviewCount}
-            ratingAverage={item.ratingAverage}
-            ownerAvatarUrl={item.ownerAvatarUrl}
-            url={item.url}
-          />
-        </Pressable>
-      )}
-    />
+    <>
+      <FlatList
+        data={repositoryNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item }) => (
+          <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
+            <RepositoryItem
+              fullName={item.fullName}
+              description={item.description}
+              language={item.language}
+              stargazersCount={item.stargazersCount}
+              forksCount={item.forksCount}
+              reviewCount={item.reviewCount}
+              ratingAverage={item.ratingAverage}
+              ownerAvatarUrl={item.ownerAvatarUrl}
+              url={item.url}
+            />
+          </Pressable>
+        )}
+      />
+    </>
   );
 };
 
