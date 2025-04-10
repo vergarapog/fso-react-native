@@ -4,6 +4,8 @@ import useRepositories from '../hooks/useRepositories';
 import theme from '../theme';
 import { useNavigate } from 'react-router-native';
 import { useState } from 'react';
+import RNPickerSelect from 'react-native-picker-select';
+import { OrderBy, SORT_OPTIONS, SortBy } from '../models/repository';
 
 const styles = StyleSheet.create({
   separator: {
@@ -13,9 +15,14 @@ const styles = StyleSheet.create({
 
 export const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories, loading }) => {
-  // const [selectedLanguage, setSelectedLanguage] = useState();
+const RepositoryList = () => {
+  const [sort, setSort] = useState({ orderBy: SortBy.CREATED_AT, orderDirection: OrderBy.DESC });
+  const { repositories, loading } = useRepositories(sort);
 
+  return <RepositoryListContainer repositories={repositories} loading={loading} setSort={setSort} />;
+};
+
+export const RepositoryListContainer = ({ repositories, loading, sort, setSort }) => {
   const navigate = useNavigate();
 
   const repositoryNodes = repositories
@@ -31,6 +38,21 @@ export const RepositoryListContainer = ({ repositories, loading }) => {
   return (
     <>
       <FlatList
+        ListHeaderComponent={
+          <RNPickerSelect
+            textInputProps={{ pointerEvents: 'none' }}
+            placeholder={{ label: 'Select an option...', value: undefined }}
+            value={sort}
+            onValueChange={(value) => {
+              if (value) setSort(SORT_OPTIONS[value]);
+            }}
+            items={[
+              { label: 'Latest Repositories', value: 'latest' },
+              { label: 'Highest rated repositories', value: 'highest' },
+              { label: 'Lowest rated repositories', value: 'lowest' },
+            ]}
+          />
+        }
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}
         renderItem={({ item }) => (
@@ -51,12 +73,6 @@ export const RepositoryListContainer = ({ repositories, loading }) => {
       />
     </>
   );
-};
-
-const RepositoryList = () => {
-  const { repositories, loading } = useRepositories();
-
-  return <RepositoryListContainer repositories={repositories} loading={loading} />;
 };
 
 export default RepositoryList;
