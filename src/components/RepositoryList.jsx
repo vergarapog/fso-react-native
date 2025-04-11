@@ -16,10 +16,11 @@ const styles = StyleSheet.create({
 export const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
-  const [sort, setSort] = useState({ orderBy: SortBy.CREATED_AT, orderDirection: OrderBy.DESC });
-  const { repositories, loading } = useRepositories(sort);
+  const [sort, setSort] = useState('latest');
+  const selectedSort = SORT_OPTIONS[sort];
+  const { repositories, loading } = useRepositories(selectedSort);
 
-  return <RepositoryListContainer repositories={repositories} loading={loading} setSort={setSort} />;
+  return <RepositoryListContainer repositories={repositories} loading={loading} sort={sort} setSort={setSort} />;
 };
 
 export const RepositoryListContainer = ({ repositories, loading, sort, setSort }) => {
@@ -31,9 +32,9 @@ export const RepositoryListContainer = ({ repositories, loading, sort, setSort }
       })
     : [];
 
-  if (loading) {
-    return <ActivityIndicator style={theme.styles.container} size="large" color={theme.colors.primary} />;
-  }
+  // if (loading) {
+  //   return <ActivityIndicator style={theme.styles.container} size="large" color={theme.colors.primary} />;
+  // }
 
   return (
     <>
@@ -44,7 +45,7 @@ export const RepositoryListContainer = ({ repositories, loading, sort, setSort }
             placeholder={{ label: 'Select an option...', value: undefined }}
             value={sort}
             onValueChange={(value) => {
-              if (value) setSort(SORT_OPTIONS[value]);
+              if (value) setSort(value);
             }}
             items={[
               { label: 'Latest Repositories', value: 'latest' },
@@ -55,6 +56,8 @@ export const RepositoryListContainer = ({ repositories, loading, sort, setSort }
         }
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}
+        pointerEvents={loading ? 'none' : 'auto'}
+        style={{ opacity: loading ? 0.7 : 1 }}
         renderItem={({ item }) => (
           <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
             <RepositoryItem
