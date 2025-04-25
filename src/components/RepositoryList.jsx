@@ -1,12 +1,12 @@
 import { FlatList, View, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
-import theme from '../theme';
 import { useNavigate } from 'react-router-native';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import RNPickerSelect from 'react-native-picker-select';
-import { OrderBy, SORT_OPTIONS, SortBy } from '../models/repository';
+import { SORT_OPTIONS } from '../models/repository';
 import { Searchbar } from 'react-native-paper';
+import { useDebouncedCallback } from 'use-debounce';
 
 const styles = StyleSheet.create({
   separator: {
@@ -45,20 +45,16 @@ const RepositoryList = () => {
 };
 
 export const RepositoryListContainer = ({ repositories, loading, sort, setSort, searchQuery, setSearchQuery }) => {
-  const [localSearch, setLocalSearch] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setSearchQuery(localSearch);
-    }, 300);
-    return () => clearTimeout(timeout);
-  }, [localSearch]);
+  const debounced = useDebouncedCallback((value) => {
+    setSearchQuery(value);
+  }, 300);
 
   const headerComponent = useMemo(
     () => (
       <View>
-        <Searchbar style={styles.searchBar} inputStyle={styles.input} placeholder="Search" onChangeText={setLocalSearch} mode="view" />
+        <Searchbar style={styles.searchBar} inputStyle={styles.input} placeholder="Search" onChangeText={debounced} mode="view" />
         <RNPickerSelect
           textInputProps={{ pointerEvents: 'none' }}
           placeholder={{ label: 'Select an option...', value: undefined }}
