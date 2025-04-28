@@ -1,11 +1,12 @@
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
-import Text from './Text';
+import Text from '@/components/Text';
 import { useFormik } from 'formik';
 import theme from '../theme';
 import * as yup from 'yup';
 import useSignIn from '../hooks/useSignIn';
 import { useNavigate } from 'react-router-native';
 import { useState } from 'react';
+import useSignUp from '../hooks/useSignUp';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,14 +47,27 @@ const styles = StyleSheet.create({
 const initialValues = {
   username: '',
   password: '',
+  confirmPassword: '',
 };
 
 const validationSchema = yup.object().shape({
-  username: yup.string().min(3, 'Username must be more than 3 characters').required('Username is required'),
-  password: yup.string().min(3, 'Password must be more than 3 characters').required('Password is required'),
+  username: yup
+    .string()
+    .min(5, 'Username must be more than 5 characters')
+    .max(30, 'Username must be less than 30 characters')
+    .required('Username is required'),
+  password: yup
+    .string()
+    .min(5, 'Password must be more than 5 characters')
+    .max(50, 'Password must be less than 50 characters')
+    .required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords must match')
+    .required('Confirm Password is required'),
 });
 
-export const SignInForm = ({ onSubmit, loginError }) => {
+export const SignUpForm = ({ onSubmit, signUpError }) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -62,9 +76,9 @@ export const SignInForm = ({ onSubmit, loginError }) => {
 
   return (
     <View style={styles.container}>
-      {!!loginError && (
+      {!!signUpError && (
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{loginError}</Text>
+          <Text style={styles.errorText}>{signUpError}</Text>
         </View>
       )}
       <TextInput
@@ -72,6 +86,8 @@ export const SignInForm = ({ onSubmit, loginError }) => {
         value={formik.values.username}
         onChangeText={formik.handleChange('username')}
         placeholder="Username"
+        autoComplete="off"
+        textContentType="none"
       />
       {formik.touched.username && formik.errors.username && <Text style={{ color: 'red' }}>{formik.errors.username}</Text>}
       <TextInput
@@ -80,8 +96,19 @@ export const SignInForm = ({ onSubmit, loginError }) => {
         onChangeText={formik.handleChange('password')}
         placeholder="Password"
         secureTextEntry
+        autoComplete="new-password"
       />
       {formik.touched.password && formik.errors.password && <Text style={{ color: 'red' }}>{formik.errors.password}</Text>}
+      <TextInput
+        style={[styles.input, formik.errors.confirmPassword && { borderColor: 'red' }]}
+        value={formik.values.confirmPassword}
+        onChangeText={formik.handleChange('confirmPassword')}
+        placeholder="Confirm password"
+        autoComplete="new-password"
+        secureTextEntry
+      />
+      {formik.touched.confirmPassword && formik.errors.confirmPassword && <Text style={{ color: 'red' }}>{formik.errors.confirmPassword}</Text>}
+
       <Pressable style={styles.submitButton} onPress={formik.handleSubmit}>
         <Text style={styles.submitButtonText}>Submit</Text>
       </Pressable>
@@ -89,22 +116,23 @@ export const SignInForm = ({ onSubmit, loginError }) => {
   );
 };
 
-const SignIn = () => {
+const SignUp = () => {
+  const [signUp] = useSignUp();
   const [signIn] = useSignIn();
-  const [loginError, setLoginError] = useState('');
+  const [signUpError, setSignUpError] = useState('');
   const navigate = useNavigate();
 
   const onSubmit = async (values) => {
     try {
-      const data = await signIn(values);
+      await signUp(values);
+      await signIn(values);
       navigate('/');
     } catch (error) {
-      setLoginError('Invalid username or password');
-      console.log(error);
+      setSignUpError(error.message);
     }
   };
 
-  return <SignInForm onSubmit={onSubmit} loginError={loginError} />;
+  return <SignUpForm onSubmit={onSubmit} signUpError={signUpError} />;
 };
 
-export default SignIn;
+export default SignUp;

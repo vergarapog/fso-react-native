@@ -1,5 +1,5 @@
 import { FlatList, View, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
-import RepositoryItem from './RepositoryItem';
+import RepositoryItem from '../components/RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
 import { useNavigate } from 'react-router-native';
 import React, { useMemo, useState } from 'react';

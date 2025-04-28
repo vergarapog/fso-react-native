@@ -1,5 +1,5 @@
 import { render, screen, within, waitFor } from '@testing-library/react-native';
-import { RepositoryListContainer } from '../components/RepositoryList';
+import { RepositoryListContainer } from '../routes/RepositoryList';
 import { MemoryRouter } from 'react-router-native';
 
 jest.mock('expo-font');

@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
-import Text from './Text';
+import Text from '@/components/Text';
 import { useFormik } from 'formik';
 import theme from '../theme';
 import * as yup from 'yup';

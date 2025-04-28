@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 import { useParams } from 'react-router-native';
-import RepositoryItem from './RepositoryItem';
+import RepositoryItem from '@/components/RepositoryItem';
 import theme from '../theme';
 import useSingleRepository from '../hooks/useSingleRepository';
-import Text from './Text';
+import Text from '@/components/Text';
 import { format } from 'date-fns';
 
 const styles = StyleSheet.create({
