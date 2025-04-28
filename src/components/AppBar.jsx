@@ -28,6 +28,7 @@ const AppBar = () => {
       <ScrollView horizontal style={styles.container}>
         <AppBarItem title="Repositories" route="/" style={styles.item} />
         {currentUser?.me && <AppBarItem title="Create a review" route="/review" style={styles.item} />}
+        {currentUser?.me && <AppBarItem title="My reviews" route="/myreviews" style={styles.item} />}
         {currentUser?.me ? (
           <AppBarItem title="Sign Out" onPress={logout} style={styles.item} />
         ) : (

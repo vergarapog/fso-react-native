@@ -54,12 +54,21 @@ export const GET_SINGLE_REPOSITORY = gql`
 `;
 
 export const GET_ME = gql`
-  query Me {
+  query Me($includeReviews: Boolean = false) {
     me {
       id
       username
       createdAt
       reviewCount
+      reviews @include(if: $includeReviews) {
+        edges {
+          node {
+            ...ReviewFields
+          }
+        }
+      }
     }
   }
+  ${REPOSITORY_FIELDS}
+  ${REVIEW_FIELDS}
 `;
