@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import Text from './Text';
 import theme from '@/theme';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +31,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const ReviewItem = ({ item }) => {
+const ReviewItem = ({ item, showButtons = false }) => {
+  const navigate = useNavigate();
+
+  console.log(item.repository);
+
   const { rating, user, text, createdAt } = item;
   return (
     <View style={styles.container}>
@@ -43,6 +48,13 @@ const ReviewItem = ({ item }) => {
           <Text>{format(createdAt, 'dd.MM.yyyy')}</Text>
         </View>
         <Text>{text}</Text>
+
+        {showButtons && (
+          <View style={{ marginTop: 10, flexDirection: 'row', gap: 10 }}>
+            <Text onPress={() => navigate(`/repository/${item.repository.id}`)}>View Repository</Text>
+            <Text>Delete Review</Text>
+          </View>
+        )}
       </View>
     </View>
   );

@@ -13,19 +13,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
+  title: {
+    fontWeight: 'bold',
+  },
 });
 
 const MyReviews = () => {
   const { currentUser } = useCurrentUser({ includeReviews: true });
 
+  // console.log(currentUser?.me?.reviews?.edges);
+
   return (
     <View style={{ flex: 1 }}>
       <FlatList
         data={currentUser?.me?.reviews?.edges}
-        renderItem={({ item }) => <ReviewItem item={{ user: { username: item.node.repository.fullName }, ...item.node }} />}
+        renderItem={({ item }) => <ReviewItem item={{ user: { username: item.node.repository.fullName }, ...item.node }} showButtons={true} />}
         ListHeaderComponent={
           <View style={styles.container}>
-            <Text>My Reviews</Text>
+            <Text style={styles.title}>My Reviews</Text>
           </View>
         }
       />
