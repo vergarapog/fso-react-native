@@ -19,15 +19,15 @@ const styles = StyleSheet.create({
 });
 
 const MyReviews = () => {
-  const { currentUser } = useCurrentUser({ includeReviews: true });
-
-  // console.log(currentUser?.me?.reviews?.edges);
+  const { currentUser, refetch } = useCurrentUser({ includeReviews: true });
 
   return (
     <View style={{ flex: 1 }}>
       <FlatList
         data={currentUser?.me?.reviews?.edges}
-        renderItem={({ item }) => <ReviewItem item={{ user: { username: item.node.repository.fullName }, ...item.node }} showButtons={true} />}
+        renderItem={({ item }) => (
+          <ReviewItem item={{ user: { username: item.node.repository.fullName }, ...item.node }} showButtons={true} refetch={refetch} />
+        )}
         ListHeaderComponent={
           <View style={styles.container}>
             <Text style={styles.title}>My Reviews</Text>

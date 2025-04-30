@@ -1,8 +1,9 @@
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import Text from './Text';
 import theme from '@/theme';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-native';
+import useDeleteReview from '@/hooks/useDeleteReview';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,12 +30,26 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 4,
   },
+  buttonContainer: {
+    marginTop: 10,
+    flexDirection: 'row',
+    gap: 10,
+  },
+  button: {
+    color: theme.colors.white,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    borderRadius: 5,
+  },
+  viewButton: { backgroundColor: theme.colors.primary },
+  deleteButton: { backgroundColor: theme.colors.redError },
 });
 
-const ReviewItem = ({ item, showButtons = false }) => {
+const ReviewItem = ({ item, showButtons = false, refetch }) => {
   const navigate = useNavigate();
+  const [remove] = useDeleteReview();
 
-  console.log(item.repository);
+  console.log(refetch);
 
   const { rating, user, text, createdAt } = item;
   return (
@@ -50,9 +65,32 @@ const ReviewItem = ({ item, showButtons = false }) => {
         <Text>{text}</Text>
 
         {showButtons && (
-          <View style={{ marginTop: 10, flexDirection: 'row', gap: 10 }}>
-            <Text onPress={() => navigate(`/repository/${item.repository.id}`)}>View Repository</Text>
-            <Text>Delete Review</Text>
+          <View style={styles.buttonContainer}>
+            <Text style={[styles.button, styles.viewButton]} onPress={() => navigate(`/repository/${item.repository.id}`)}>
+              View Repository
+            </Text>
+            <Text
+              style={[styles.button, styles.deleteButton]}
+              onPress={() => {
+                Alert.alert('Delete Review', 'Are you sure you want to delete this review?', [
+                  { text: 'Cancel', style: 'cancel' },
+                  {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: async () => {
+                      try {
+                        await remove(item.id);
+                        refetch();
+                      } catch (error) {
+                        console.error('Error deleting review:', error);
+                      }
+                    },
+                  },
+                ]);
+              }}
+            >
+              Delete Review
+            </Text>
           </View>
         )}
       </View>
