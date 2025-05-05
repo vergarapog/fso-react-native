@@ -4,16 +4,14 @@ import { PAGE_INFO_FIELDS, REPOSITORY_FIELDS, REVIEW_FIELDS } from './fragments'
 export const GET_REPOSITORIES = gql`
   # query Repositories($orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection) {
   # repositories(orderBy: $orderBy, orderDirection: $orderDirection) {
-  query Repositories($orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection, $searchKeyword: String) {
-    repositories(orderBy: $orderBy, orderDirection: $orderDirection, searchKeyword: $searchKeyword) {
+  query Repositories($after: String, $first: Int, $orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection, $searchKeyword: String) {
+    repositories(after: $after, first: $first, orderBy: $orderBy, orderDirection: $orderDirection, searchKeyword: $searchKeyword) {
       edges {
         node {
           ...RepositoryFields
           reviews {
             totalCount
-            pageInfo {
-              ...PageInfoFields
-            }
+
             edges {
               cursor
               node {
@@ -22,6 +20,9 @@ export const GET_REPOSITORIES = gql`
             }
           }
         }
+      }
+      pageInfo {
+        ...PageInfoFields
       }
     }
   }

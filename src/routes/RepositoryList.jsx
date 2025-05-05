@@ -30,7 +30,11 @@ const RepositoryList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sort, setSort] = useState('latest');
   const selectedSort = SORT_OPTIONS[sort];
-  const { repositories, loading } = useRepositories(selectedSort, searchQuery);
+  const { repositories, fetchMore, loading } = useRepositories(5, selectedSort, searchQuery);
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   return (
     <RepositoryListContainer
@@ -40,11 +44,12 @@ const RepositoryList = () => {
       setSort={setSort}
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
+      onEndReach={onEndReach}
     />
   );
 };
 
-export const RepositoryListContainer = ({ repositories, loading, sort, setSort, searchQuery, setSearchQuery }) => {
+export const RepositoryListContainer = ({ repositories, loading, sort, setSort, searchQuery, setSearchQuery, onEndReach }) => {
   const navigate = useNavigate();
 
   const debounced = useDebouncedCallback((value) => {
@@ -86,6 +91,8 @@ export const RepositoryListContainer = ({ repositories, loading, sort, setSort, 
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}
         pointerEvents={loading ? 'none' : 'auto'}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
         renderItem={({ item }) => (
           <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
             <RepositoryItem {...item} />
