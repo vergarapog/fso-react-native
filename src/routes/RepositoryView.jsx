@@ -17,7 +17,11 @@ const RepositoryInfo = ({ repository }) => {
 const RepositoryView = () => {
   const { id } = useParams();
 
-  const { repository, loading } = useSingleRepository(id);
+  const { repository, fetchMore, loading } = useSingleRepository({ first: 5, id });
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   if (loading) {
     return <ActivityIndicator style={theme.styles.container} size="large" color={theme.colors.primary} />;
@@ -29,6 +33,8 @@ const RepositoryView = () => {
         data={repository?.reviews?.edges}
         renderItem={({ item }) => <ReviewItem item={item.node} />}
         ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
       />
     </View>
   );

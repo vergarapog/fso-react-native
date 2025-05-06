@@ -32,10 +32,10 @@ export const GET_REPOSITORIES = gql`
 `;
 
 export const GET_SINGLE_REPOSITORY = gql`
-  query Repository($repositoryId: ID!) {
+  query Repository($first: Int, $after: String, $repositoryId: ID!) {
     repository(id: $repositoryId) {
       ...RepositoryFields
-      reviews {
+      reviews(first: $first, after: $after) {
         edges {
           node {
             id
@@ -48,10 +48,14 @@ export const GET_SINGLE_REPOSITORY = gql`
             }
           }
         }
+        pageInfo {
+          ...PageInfoFields
+        }
       }
     }
   }
   ${REPOSITORY_FIELDS}
+  ${PAGE_INFO_FIELDS}
 `;
 
 export const GET_ME = gql`
