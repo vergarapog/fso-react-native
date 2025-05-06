@@ -1,4 +1,4 @@
-import { FlatList, View, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
+import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import RepositoryItem from '../components/RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
 import { useNavigate } from 'react-router-native';
@@ -30,7 +30,7 @@ const RepositoryList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sort, setSort] = useState('latest');
   const selectedSort = SORT_OPTIONS[sort];
-  const { repositories, fetchMore, loading } = useRepositories(5, selectedSort, searchQuery);
+  const { repositories, fetchMore, loading } = useRepositories({ first: 4, selectedSort, searchQuery });
 
   const onEndReach = () => {
     fetchMore();
